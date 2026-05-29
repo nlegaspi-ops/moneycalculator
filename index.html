@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>What Could Your Money Buy?</title>
-  <meta name="description" content="Enter any amount to see what you could buy — or what it could grow into if invested. A fun, educational money tool." />
+  <title>Spendit — your money, reimagined</title>
+  <meta name="description" content="Type any dollar amount and see what you could buy — or what it could grow into if you invested it instead. Free, no sign-up, no ads." />
+  <meta property="og:title" content="Spendit — your money, reimagined" />
+  <meta property="og:description" content="See what any amount of money could buy, or grow into if invested. Free forever." />
+  <meta property="og:type" content="website" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +22,7 @@
       --border2: rgba(0,0,0,0.18);
       --green: #1D9E75;
       --green-light: #E1F5EE;
-      --amber-light: #FAEEDA;
+      --green-mid: #5DCAA5;
       --amber-mid: #FAC775;
       --amber-dark: #633806;
       --teal-dark: #085041;
@@ -38,7 +41,6 @@
         --border: rgba(255,255,255,0.1);
         --border2: rgba(255,255,255,0.18);
         --green-light: #04342C;
-        --amber-light: #412402;
         --amber-mid: #854F0B;
         --amber-dark: #FAC775;
         --teal-dark: #9FE1CB;
@@ -55,177 +57,186 @@
       margin: 0 auto;
       background: var(--bg);
       min-height: 100vh;
-      padding: 0 0 4rem;
     }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo { font-size: 18px; font-weight: 500; color: var(--text); letter-spacing: -.02em; }
+    .logo span { color: var(--green); }
+    .nav-cta {
+      font-size: 12px; font-weight: 500;
+      background: var(--green); color: #fff;
+      border: none; border-radius: 20px;
+      padding: 7px 14px; cursor: pointer;
+    }
+
+    /* ── Hero ── */
     .hero {
-      text-align: center;
-      padding: 2rem 1.5rem 1.5rem;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 3.5rem 20px 3rem; text-align: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('hero.jpg');
+      background-size: cover; background-position: center;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10,10,8,0.62);
+    }
+    .hero-content { position: relative; z-index: 1; width: 100%; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 500;
+      background: rgba(255,255,255,0.15); color: #fff;
+      border-radius: 20px; padding: 4px 12px; margin-bottom: 1rem;
+      border: 0.5px solid rgba(255,255,255,0.25);
+    }
+    .hero h1 {
+      font-size: 32px; font-weight: 500; color: #fff;
+      line-height: 1.2; margin-bottom: .75rem;
+    }
+    .hero h1 em { font-style: normal; color: #5DCAA5; }
+    .hero-sub {
+      font-size: 14px; color: rgba(255,255,255,0.72);
+      line-height: 1.65; margin-bottom: .75rem;
+      max-width: 290px; margin-left: auto; margin-right: auto;
+    }
+    .hero-note { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 2rem; }
+    .hero-arrow {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: rgba(255,255,255,0.5); font-size: 11px;
+    }
+    .hero-arrow i { font-size: 18px; color: rgba(255,255,255,0.35); }
+
+    /* ── Tool section ── */
+    .tool-section { background: var(--bg); border-bottom: 0.5px solid var(--border); }
+    .tool-intro {
+      text-align: center; padding: 1.25rem 20px .75rem;
       border-bottom: 0.5px solid var(--border);
     }
-    .hero-eyebrow {
-      font-size: 12px;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: var(--text3);
-      margin-bottom: .75rem;
+    .tool-intro-label {
+      font-size: 11px; font-weight: 500; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--green); margin-bottom: .35rem;
     }
-    .hero-input-wrap {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      border-bottom: 2px solid var(--border2);
-      padding-bottom: 4px;
-      margin-bottom: 1.25rem;
+    .tool-intro-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+    .app { padding: 1.25rem 1.25rem 1.5rem; }
+
+    /* Amount + toggle row */
+    .amt-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; }
+    .amt-dollar { font-size: 32px; font-weight: 500; color: var(--text3); line-height: 1; }
+    .amt-input {
+      font-size: 32px; font-weight: 500;
+      border: none; border-bottom: 2px solid var(--border2);
+      background: transparent; color: var(--text);
+      width: 100%; outline: none; padding: 4px 0; min-width: 0;
       transition: border-color .2s;
     }
-    .hero-input-wrap:focus-within { border-bottom-color: var(--green); }
-    .hero-dollar {
-      font-size: 38px;
-      font-weight: 500;
-      color: var(--text3);
-      line-height: 1;
-    }
-    .hero-input {
-      font-size: 38px;
-      font-weight: 500;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      width: 200px;
-      min-width: 0;
-    }
-    .hero-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
-      border-radius: 30px;
-      padding: 6px 16px;
-      cursor: pointer;
-      user-select: none;
+    .amt-input:focus { border-bottom-color: var(--green); }
+    .tog-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 30px; padding: 5px 12px;
+      cursor: pointer; user-select: none;
       -webkit-tap-highlight-color: transparent;
-      font-size: 13px;
-      color: var(--text2);
+      font-size: 12px; color: var(--text2);
+      white-space: nowrap; margin-left: auto; flex-shrink: 0;
     }
     .track {
-      width: 36px; height: 20px; border-radius: 10px;
+      width: 32px; height: 18px; border-radius: 9px;
       background: var(--border2); position: relative;
       transition: background .2s; flex-shrink: 0;
     }
     .track.on { background: var(--green); }
     .thumb {
-      width: 16px; height: 16px; border-radius: 50%;
+      width: 14px; height: 14px; border-radius: 50%;
       background: #fff; position: absolute;
       top: 2px; left: 2px; transition: left .2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
-    .track.on .thumb { left: 18px; }
-    .cats-wrap {
-      padding: 1rem 1.25rem .75rem;
-      border-bottom: 0.5px solid var(--border);
-    }
-    .cats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
+    .track.on .thumb { left: 16px; }
+
+    /* Category pills */
+    .cats { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1.25rem; }
     .cat {
-      font-size: 12px;
-      padding: 5px 11px;
-      border-radius: 20px;
+      font-size: 12px; padding: 5px 11px; border-radius: 20px;
       border: 0.5px solid var(--border2);
-      background: transparent;
-      color: var(--text2);
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      min-height: 30px;
-      display: flex;
-      align-items: center;
+      background: transparent; color: var(--text2);
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      min-height: 30px; display: flex; align-items: center;
       transition: all .12s;
     }
     .cat.on {
-      background: var(--text);
-      color: var(--bg);
+      background: var(--text); color: var(--bg);
       border-color: var(--text);
     }
-    .split-wrap { padding: 1rem 1.25rem 0; }
+
+    /* Two-column split */
     .split {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-      gap: 10px;
-      margin-bottom: 1.5rem;
-      align-items: start;
+      display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: 10px; margin-bottom: 1.5rem; align-items: start;
     }
     .panel { border-radius: var(--radius-lg); overflow: hidden; }
-    .panel-head {
-      padding: 10px 12px 9px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
+    .panel-head { padding: 10px 12px 9px; display: flex; align-items: center; gap: 7px; }
     .panel-head-spend { background: var(--amber-mid); }
     .panel-head-invest { background: #9FE1CB; }
     @media (prefers-color-scheme: dark) {
       .panel-head-invest { background: #085041; }
-      .panel-head-spend { background: #633806; }
+      .panel-head-spend  { background: #633806; }
     }
     .panel-head-icon { font-size: 17px; flex-shrink: 0; line-height: 1; }
-    .panel-head-label {
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 1.3;
-    }
-    .panel-head-label.spend { color: var(--amber-dark); }
+    .panel-head-label { font-size: 12px; font-weight: 500; line-height: 1.3; }
+    .panel-head-label.spend  { color: var(--amber-dark); }
     .panel-head-label.invest { color: var(--teal-dark); }
     .panel-body {
       background: var(--bg);
-      border: 0.5px solid var(--border);
-      border-top: none;
+      border: 0.5px solid var(--border); border-top: none;
       border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     }
+
+    /* Buy list */
     .buy-list { padding: 6px; }
-    .buy-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 7px;
-      padding: 7px 5px;
-    }
+    .buy-item { display: flex; align-items: flex-start; gap: 7px; padding: 7px 5px; }
     .buy-item + .buy-item { border-top: 0.5px solid var(--border); }
     .buy-icon { font-size: 17px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
-    .buy-name { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; margin-bottom: 1px; }
+    .buy-name  { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; margin-bottom: 1px; }
     .buy-price { font-size: 11px; color: var(--text3); }
     .buy-tag {
       font-size: 10px; padding: 1px 5px; border-radius: 3px;
-      background: var(--amber-light); color: var(--amber-dark);
+      background: #FAEEDA; color: #633806;
       display: inline-block; margin-top: 3px;
     }
     .buy-empty {
       font-size: 12px; color: var(--text3);
       padding: 14px 8px; text-align: center; line-height: 1.5;
     }
-    .invest-body { padding: 10px 8px 10px; }
-    .rate-row {
-      display: flex; align-items: center;
-      gap: 6px; margin-bottom: 4px; padding: 0 2px;
-    }
+
+    /* Invest panel */
+    .invest-body { padding: 10px 8px; }
+    .rate-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; padding: 0 2px; }
     .rate-row input[type=range] { flex: 1; min-width: 0; accent-color: var(--green); }
     .rate-lbl { font-size: 11px; color: var(--text3); white-space: nowrap; }
     .rate-val { font-size: 11px; font-weight: 500; color: var(--text); min-width: 24px; text-align: right; }
     .rate-hint { font-size: 10px; color: var(--text3); margin-bottom: 10px; padding: 0 2px; }
     .yr-cards { display: flex; flex-direction: column; gap: 5px; }
-    .yr-card {
-      background: var(--bg2);
-      border-radius: var(--radius-md);
-      padding: 8px 9px;
-    }
+    .yr-card { background: var(--bg2); border-radius: var(--radius-md); padding: 8px 9px; }
     .yr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
     .yr-label { font-size: 10px; color: var(--text3); }
     .yr-pct {
       font-size: 10px; color: var(--green);
-      background: var(--green-light);
-      border-radius: 4px; padding: 1px 5px;
+      background: var(--green-light); border-radius: 4px; padding: 1px 5px;
     }
     .yr-val { font-size: 16px; font-weight: 500; color: var(--green); }
     .invest-note {
@@ -233,136 +244,255 @@
       margin-top: 8px; padding: 8px;
       background: var(--bg2); border-radius: var(--radius-md);
     }
-    .chart-section { padding: 0 1.25rem; }
+
+    /* Chart */
     .chart-head {
       font-size: 12px; color: var(--text2);
-      margin-bottom: 8px;
-      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
     }
     .chart-legend {
       display: flex; gap: 10px;
-      font-size: 11px; color: var(--text3);
-      margin-left: auto;
+      font-size: 11px; color: var(--text3); margin-left: auto;
     }
     .chart-legend span { display: flex; align-items: center; gap: 4px; }
     .ldot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-    .chart-wrap { position: relative; width: 100%; height: 190px; margin-bottom: 1.5rem; }
+    .chart-wrap { position: relative; width: 100%; height: 190px; margin-bottom: .5rem; }
+
+    /* Disclaimer */
     .disclaimer {
-      margin: 0 1.25rem;
+      margin: 1rem 0 0;
       padding: .875rem 1rem;
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
+      background: var(--bg2); border: 0.5px solid var(--border);
       border-radius: var(--radius-lg);
-      font-size: 11px;
-      color: var(--text3);
-      line-height: 1.7;
+      font-size: 11px; color: var(--text3); line-height: 1.7;
     }
     .disc-title {
       display: flex; align-items: center; gap: 5px;
-      font-size: 11px; font-weight: 500;
-      color: var(--text2); margin-bottom: 5px;
+      font-size: 11px; font-weight: 500; color: var(--text2); margin-bottom: 4px;
     }
     .disclaimer a { color: var(--text2); text-decoration: underline; }
-    .sr-only {
-      position: absolute; width: 1px; height: 1px;
-      padding: 0; margin: -1px; overflow: hidden;
-      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+
+    /* How it works */
+    .how {
+      padding: 2.25rem 20px;
+      background: var(--bg2); border-bottom: 0.5px solid var(--border);
     }
-    @media (max-width: 400px) {
-      .hero-dollar, .hero-input { font-size: 32px; }
-      .hero-input { width: 160px; }
+    .section-label {
+      font-size: 11px; font-weight: 500; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--text3);
+      margin-bottom: .75rem; text-align: center;
     }
+    .section-head {
+      font-size: 20px; font-weight: 500; color: var(--text);
+      text-align: center; margin-bottom: 1.5rem; line-height: 1.3;
+    }
+    .steps { display: flex; flex-direction: column; gap: 14px; }
+    .step { display: flex; align-items: flex-start; gap: 12px; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--green); color: #fff;
+      font-size: 12px; font-weight: 500;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .step-desc  { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+    /* Features */
+    .features { padding: 2.25rem 20px; border-bottom: 0.5px solid var(--border); }
+    .feat-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .feat-card { background: var(--bg2); border-radius: var(--radius-lg); padding: 14px 12px; }
+    .feat-icon  { font-size: 20px; margin-bottom: 8px; line-height: 1; }
+    .feat-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .feat-desc  { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+    /* Footer */
+    .footer {
+      padding: 1.75rem 20px; text-align: center;
+      background: var(--bg2); border-top: 0.5px solid var(--border);
+    }
+    .footer-logo { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: .5rem; }
+    .footer-logo span { color: var(--green); }
+    .footer-links { display: flex; justify-content: center; gap: 16px; margin-bottom: .75rem; }
+    .footer-links a { font-size: 12px; color: var(--text3); text-decoration: none; }
+    .footer-links a:hover { color: var(--text2); }
+    .footer-copy { font-size: 11px; color: var(--text3); line-height: 1.7; }
   </style>
 </head>
 <body>
 <div class="page">
-  <h1 class="sr-only">What could your money buy — or grow into if invested?</h1>
+  <h1 class="sr-only">Spendit — see what your money could buy, or grow into if invested</h1>
 
-  <div class="hero">
-    <div class="hero-eyebrow">spend it or grow it?</div>
-    <div class="hero-input-wrap">
-      <span class="hero-dollar">$</span>
-      <input class="hero-input" id="amt" type="number" inputmode="decimal" min="0" value="5" placeholder="0" aria-label="Dollar amount" />
+  <nav class="nav">
+    <div class="logo">spend<span>it</span></div>
+    <button class="nav-cta" onclick="document.getElementById('tool-anchor').scrollIntoView({behavior:'smooth'})">try it →</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="ti ti-sparkles" aria-hidden="true" style="font-size:12px"></i>
+        free · no sign-up · no ads
+      </div>
+      <h1>your money,<br><em>reimagined</em></h1>
+      <p class="hero-sub">Type any dollar amount. See what you could buy — or what it could grow into if you invested it instead.</p>
+      <p class="hero-note">Works on any amount. $5 to $5 trillion.</p>
+      <div class="hero-arrow">
+        <span>try it below</span>
+        <i class="ti ti-arrow-down" aria-hidden="true"></i>
+      </div>
     </div>
-    <br>
-    <div class="hero-toggle" id="tog" role="button" aria-pressed="false" tabindex="0">
-      <div class="track" id="track"><div class="thumb"></div></div>
-      <span id="togLabel">one-time</span>
+  </section>
+
+  <div id="tool-anchor" class="tool-section">
+    <div class="tool-intro">
+      <div class="tool-intro-label">← live tool →</div>
+      <div class="tool-intro-text">type any amount and see both sides instantly</div>
     </div>
-  </div>
 
-  <div class="cats-wrap">
-    <div class="cats" id="cats"></div>
-  </div>
-
-  <div class="split-wrap">
-    <div class="split">
-      <div class="panel">
-        <div class="panel-head panel-head-spend">
-          <span class="panel-head-icon">🛍️</span>
-          <div class="panel-head-label spend">if you<br>spent it</div>
-        </div>
-        <div class="panel-body">
-          <div class="buy-list" id="buyList"></div>
+    <div class="app">
+      <div class="amt-row">
+        <span class="amt-dollar">$</span>
+        <input class="amt-input" id="amt" type="number" inputmode="decimal" min="0" value="5" placeholder="0" aria-label="Dollar amount" />
+        <div class="tog-pill" id="tog" role="button" aria-pressed="false" tabindex="0">
+          <div class="track" id="track"><div class="thumb"></div></div>
+          <span id="togLabel">one-time</span>
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-head panel-head-invest">
-          <span class="panel-head-icon">🌱</span>
-          <div class="panel-head-label invest">if you<br>invested it</div>
+      <div class="cats" id="cats"></div>
+
+      <div class="split">
+        <div class="panel">
+          <div class="panel-head panel-head-spend">
+            <span class="panel-head-icon">🛍️</span>
+            <div class="panel-head-label spend">if you<br>spent it</div>
+          </div>
+          <div class="panel-body">
+            <div class="buy-list" id="buyList"></div>
+          </div>
         </div>
-        <div class="panel-body">
-          <div class="invest-body">
-            <div class="rate-row">
-              <span class="rate-lbl">return</span>
-              <input type="range" id="rate" min="1" max="15" value="7" step="1" aria-label="Annual return rate" />
-              <span class="rate-val" id="rateOut">7%</span>
+
+        <div class="panel">
+          <div class="panel-head panel-head-invest">
+            <span class="panel-head-icon">🌱</span>
+            <div class="panel-head-label invest">if you<br>invested it</div>
+          </div>
+          <div class="panel-body">
+            <div class="invest-body">
+              <div class="rate-row">
+                <span class="rate-lbl">return</span>
+                <input type="range" id="rate" min="1" max="15" value="7" step="1" aria-label="Annual return rate" />
+                <span class="rate-val" id="rateOut">7%</span>
+              </div>
+              <div class="rate-hint">S&amp;P 500 avg ~10%/yr</div>
+              <div class="yr-cards" id="yrCards"></div>
+              <div class="invest-note" id="note"></div>
             </div>
-            <div class="rate-hint">S&amp;P 500 avg ~10%/yr</div>
-            <div class="yr-cards" id="yrCards"></div>
-            <div class="invest-note" id="note"></div>
           </div>
         </div>
       </div>
+
+      <div class="chart-head">
+        30-year growth
+        <div class="chart-legend" id="legend"></div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="gc" role="img" aria-label="Line chart showing 30-year compound investment growth"></canvas>
+      </div>
+
+      <div class="disclaimer">
+        <div class="disc-title">
+          <i class="ti ti-info-circle" aria-hidden="true" style="font-size:13px"></i>
+          for fun &amp; education only
+        </div>
+        This tool is for educational and entertainment purposes only — not financial advice. Returns shown are hypothetical, user-selected, and not guaranteed. Past market performance doesn't predict future results. No investment is risk-free. Always consult a qualified financial advisor before making investment decisions. By using this tool you agree to our <a href="/terms">Terms of Service</a>. &copy; <span id="yr"></span> Spendit.
+      </div>
     </div>
   </div>
 
-  <div class="chart-section">
-    <div class="chart-head">
-      30-year growth
-      <div class="chart-legend" id="legend"></div>
+  <section class="how">
+    <p class="section-label">how it works</p>
+    <h2 class="section-head">three seconds to an<br>"oh wow" moment</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Type any amount</div>
+          <div class="step-desc">From $5 to $5 trillion — Spendit handles any number you throw at it.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">See what it could buy</div>
+          <div class="step-desc">Browse 100+ items across 12 categories — from coffee to private islands to erasing the national debt.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">See what it could become</div>
+          <div class="step-desc">Watch the same amount compound over 10, 20, and 30 years. Adjust the return rate. Toggle monthly contributions. Get mind-blown.</div>
+        </div>
+      </div>
     </div>
-    <div class="chart-wrap">
-      <canvas id="gc" role="img" aria-label="Line chart showing 30-year compound investment growth"></canvas>
-    </div>
-  </div>
+  </section>
 
-  <div class="disclaimer">
-    <div class="disc-title">
-      <i class="ti ti-info-circle" aria-hidden="true" style="font-size:13px"></i>
-      for fun &amp; education only
+  <section class="features">
+    <p class="section-label">what's inside</p>
+    <h2 class="section-head">more than a calculator</h2>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🛍️</div>
+        <div class="feat-title">100+ real items</div>
+        <div class="feat-desc">Tiered by budget so results always make sense for your amount.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌱</div>
+        <div class="feat-title">Compound growth</div>
+        <div class="feat-desc">See your money grow over 10, 20, and 30 years with an adjustable return rate.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔁</div>
+        <div class="feat-title">Monthly mode</div>
+        <div class="feat-desc">Toggle to monthly contributions and watch small habits become serious wealth.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🤯</div>
+        <div class="feat-title">Go wild</div>
+        <div class="feat-desc">Rename a planet. Erase the national debt. Buy an NFL team. We go there.</div>
+      </div>
     </div>
-    This tool is for educational and entertainment purposes only — not financial advice. Returns shown are hypothetical, user-selected, and not guaranteed. Past market performance doesn't predict future results. No investment is risk-free. Consult a qualified financial advisor before making decisions. By using this tool you agree to our <a href="/terms">Terms of Service</a>. &copy; <span id="yr"></span> What Could Your Money Buy?
-  </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-logo">spend<span>it</span></div>
+    <div class="footer-links">
+      <a href="/terms">Terms of Service</a>
+      <a href="mailto:hello@spendit.app">Contact</a>
+    </div>
+    <div class="footer-copy">
+      &copy; <span id="yr2"></span> Spendit. For education &amp; entertainment only. Not financial advice.<br>
+      Past performance does not guarantee future results.
+    </div>
+  </footer>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('yr').textContent  = new Date().getFullYear();
+document.getElementById('yr2').textContent = new Date().getFullYear();
 
 const CATS = [
-  {id:'all',label:'All'},
-  {id:'food',label:'Food & drink'},
-  {id:'entertainment',label:'Entertainment'},
-  {id:'lifestyle',label:'Lifestyle'},
-  {id:'collectibles',label:'Collectibles'},
-  {id:'experiences',label:'Experiences'},
-  {id:'tech',label:'Tech'},
-  {id:'travel',label:'Travel'},
-  {id:'home',label:'Home'},
-  {id:'wheels',label:'Wheels & wings'},
-  {id:'realestate',label:'Real estate'},
+  {id:'all',label:'All'},{id:'food',label:'Food & drink'},
+  {id:'entertainment',label:'Entertainment'},{id:'lifestyle',label:'Lifestyle'},
+  {id:'collectibles',label:'Collectibles'},{id:'experiences',label:'Experiences'},
+  {id:'tech',label:'Tech'},{id:'travel',label:'Travel'},{id:'home',label:'Home'},
+  {id:'wheels',label:'Wheels & wings'},{id:'realestate',label:'Real estate'},
   {id:'wild',label:'🤯 Wild'},
 ];
 
@@ -397,7 +527,6 @@ const ITEMS = [
   {name:'Coachella VIP wristbands',icon:'🎪',price:1200,cat:'entertainment',lo:600,hi:6000},
   {name:'Private concert booking',icon:'🎤',price:500000,cat:'entertainment',lo:100000,hi:5000000},
   {name:'Buy a sports franchise',icon:'🥇',price:2000000000,cat:'entertainment',lo:500000000,hi:1e13},
-  {name:'Own an NFL team',icon:'🏈',price:5000000000,cat:'entertainment',lo:1000000000,hi:1e13},
   {name:'Chapstick',icon:'💄',price:4,cat:'lifestyle',lo:0,hi:25},
   {name:'Candle',icon:'🕯️',price:15,cat:'lifestyle',lo:8,hi:60},
   {name:'Fitness class',icon:'🧘',price:20,cat:'lifestyle',lo:12,hi:80},
@@ -502,7 +631,6 @@ function fmt(n){
   if(n < 1e15)  return '$' + (n/1e12).toFixed(2) + 'T';
   return '$' + (n/1e15).toFixed(2) + 'Q';
 }
-
 function getItems(amt){
   const fc = activeCat === 'all' ? null : activeCat;
   return ITEMS.filter(i => {
@@ -514,20 +642,19 @@ function getItems(amt){
 function render(){
   const amt  = Math.max(0, parseFloat(document.getElementById('amt').value) || 0);
   const rate = parseInt(document.getElementById('rate').value);
-
   document.getElementById('rateOut').textContent = rate + '%';
   document.getElementById('track').className = 'track' + (isMonthly ? ' on' : '');
   document.getElementById('togLabel').textContent = isMonthly ? 'monthly' : 'one-time';
   document.getElementById('tog').setAttribute('aria-pressed', isMonthly ? 'true' : 'false');
 
   const matches = getItems(amt);
-  const buyList = document.getElementById('buyList');
+  const bl = document.getElementById('buyList');
   if(amt === 0){
-    buyList.innerHTML = '<div class="buy-empty">enter an amount above ↑</div>';
+    bl.innerHTML = '<div class="buy-empty">enter an amount above ↑</div>';
   } else if(!matches.length){
-    buyList.innerHTML = '<div class="buy-empty">nothing in range —<br>try another category</div>';
+    bl.innerHTML = '<div class="buy-empty">nothing in range —<br>try another category</div>';
   } else {
-    buyList.innerHTML = matches.map(item => {
+    bl.innerHTML = matches.map(item => {
       const qty  = Math.floor(amt / item.price);
       const qStr = qty > 1 ? qty + '× ' : '';
       const pStr = qty > 1 ? fmt(item.price) + ' ea' : fmt(item.price);
