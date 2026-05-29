@@ -9,230 +9,341 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --color-bg: #ffffff;
-      --color-bg-secondary: #f5f4ef;
-      --color-bg-tertiary: #eeede8;
-      --color-text-primary: #1a1a18;
-      --color-text-secondary: #5f5e5a;
-      --color-text-tertiary: #888780;
-      --color-border: rgba(0,0,0,0.12);
-      --color-border-md: rgba(0,0,0,0.22);
+      --bg: #ffffff;
+      --bg2: #f5f4ef;
+      --bg3: #eeede8;
+      --text: #1a1a18;
+      --text2: #5f5e5a;
+      --text3: #888780;
+      --border: rgba(0,0,0,0.1);
+      --border2: rgba(0,0,0,0.18);
+      --green: #1D9E75;
+      --green-light: #E1F5EE;
+      --amber-light: #FAEEDA;
+      --amber-mid: #FAC775;
+      --amber-dark: #633806;
+      --teal-dark: #085041;
       --radius-md: 8px;
       --radius-lg: 12px;
-      --green: #1D9E75;
       --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --color-bg: #1c1c1a;
-        --color-bg-secondary: #252523;
-        --color-bg-tertiary: #2e2e2b;
-        --color-text-primary: #f0ede6;
-        --color-text-secondary: #b4b2a9;
-        --color-text-tertiary: #888780;
-        --color-border: rgba(255,255,255,0.1);
-        --color-border-md: rgba(255,255,255,0.2);
+        --bg: #1c1c1a;
+        --bg2: #252523;
+        --bg3: #2e2e2b;
+        --text: #f0ede6;
+        --text2: #b4b2a9;
+        --text3: #888780;
+        --border: rgba(255,255,255,0.1);
+        --border2: rgba(255,255,255,0.18);
+        --green-light: #04342C;
+        --amber-light: #412402;
+        --amber-mid: #854F0B;
+        --amber-dark: #FAC775;
+        --teal-dark: #9FE1CB;
       }
     }
     body {
       font-family: var(--font);
-      background: var(--color-bg-tertiary);
-      color: var(--color-text-primary);
+      background: var(--bg3);
+      color: var(--text);
       min-height: 100vh;
-      padding: 0;
     }
     .page {
-      max-width: 520px;
+      max-width: 540px;
       margin: 0 auto;
-      background: var(--color-bg);
+      background: var(--bg);
       min-height: 100vh;
-      padding: 1.5rem 1.25rem 3rem;
+      padding: 0 0 4rem;
     }
-    .app-title {
-      font-size: 20px;
+    .hero {
+      text-align: center;
+      padding: 2rem 1.5rem 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .hero-eyebrow {
+      font-size: 12px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: .75rem;
+    }
+    .hero-input-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-bottom: 2px solid var(--border2);
+      padding-bottom: 4px;
+      margin-bottom: 1.25rem;
+      transition: border-color .2s;
+    }
+    .hero-input-wrap:focus-within { border-bottom-color: var(--green); }
+    .hero-dollar {
+      font-size: 38px;
       font-weight: 500;
-      color: var(--color-text-primary);
-      margin-bottom: 4px;
+      color: var(--text3);
+      line-height: 1;
     }
-    .app-subtitle {
-      font-size: 13px;
-      color: var(--color-text-tertiary);
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
+    .hero-input {
+      font-size: 38px;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      width: 200px;
+      min-width: 0;
     }
-    .mv-input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-    .mv-dollar { font-size: 28px; font-weight: 500; color: var(--color-text-secondary); line-height: 1; }
-    .mv-amount {
-      font-size: 32px; font-weight: 500;
-      border: none; border-bottom: 2px solid var(--color-border-md);
-      background: transparent; color: var(--color-text-primary);
-      width: 100%; outline: none; padding: 4px 0;
-    }
-    .mv-amount:focus { border-bottom-color: var(--green); }
-    .mv-toggle {
-      display: flex; align-items: center; justify-content: space-between;
-      background: var(--color-bg-secondary);
-      border: 0.5px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 10px 14px; cursor: pointer; user-select: none;
+    .hero-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 30px;
+      padding: 6px 16px;
+      cursor: pointer;
+      user-select: none;
       -webkit-tap-highlight-color: transparent;
+      font-size: 13px;
+      color: var(--text2);
+    }
+    .track {
+      width: 36px; height: 20px; border-radius: 10px;
+      background: var(--border2); position: relative;
+      transition: background .2s; flex-shrink: 0;
+    }
+    .track.on { background: var(--green); }
+    .thumb {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #fff; position: absolute;
+      top: 2px; left: 2px; transition: left .2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .track.on .thumb { left: 18px; }
+    .cats-wrap {
+      padding: 1rem 1.25rem .75rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .cat {
+      font-size: 12px;
+      padding: 5px 11px;
+      border-radius: 20px;
+      border: 0.5px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      transition: all .12s;
+    }
+    .cat.on {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+    .split-wrap { padding: 1rem 1.25rem 0; }
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: 10px;
       margin-bottom: 1.5rem;
+      align-items: start;
     }
-    .mv-toggle-left { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--color-text-secondary); }
-    .mv-toggle-track {
-      width: 40px; height: 22px; border-radius: 11px;
-      background: var(--color-border-md); position: relative;
-      transition: background 0.2s; flex-shrink: 0;
+    .panel { border-radius: var(--radius-lg); overflow: hidden; }
+    .panel-head {
+      padding: 10px 12px 9px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
-    .mv-toggle-track.on { background: var(--green); }
-    .mv-toggle-thumb {
-      width: 18px; height: 18px; border-radius: 50%; background: #fff;
-      position: absolute; top: 2px; left: 2px; transition: left 0.2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    .panel-head-spend { background: var(--amber-mid); }
+    .panel-head-invest { background: #9FE1CB; }
+    @media (prefers-color-scheme: dark) {
+      .panel-head-invest { background: #085041; }
+      .panel-head-spend { background: #633806; }
     }
-    .mv-toggle-track.on .mv-toggle-thumb { left: 20px; }
-    .mv-label {
-      font-size: 11px; font-weight: 500; letter-spacing: .08em;
-      text-transform: uppercase; color: var(--color-text-tertiary); margin: 0 0 10px;
+    .panel-head-icon { font-size: 17px; flex-shrink: 0; line-height: 1; }
+    .panel-head-label {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.3;
     }
-    .mv-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
-    .mv-cat {
-      font-size: 13px; padding: 7px 13px; border-radius: 20px;
-      border: 0.5px solid var(--color-border-md);
-      background: transparent; color: var(--color-text-secondary);
-      cursor: pointer; -webkit-tap-highlight-color: transparent;
-      min-height: 36px; display: flex; align-items: center;
+    .panel-head-label.spend { color: var(--amber-dark); }
+    .panel-head-label.invest { color: var(--teal-dark); }
+    .panel-body {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     }
-    .mv-cat.active {
-      background: var(--color-text-primary);
-      color: var(--color-bg);
-      border-color: var(--color-text-primary);
+    .buy-list { padding: 6px; }
+    .buy-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 7px 5px;
     }
-    .mv-grid {
-      display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 8px; margin-bottom: 1.75rem;
+    .buy-item + .buy-item { border-top: 0.5px solid var(--border); }
+    .buy-icon { font-size: 17px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+    .buy-name { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; margin-bottom: 1px; }
+    .buy-price { font-size: 11px; color: var(--text3); }
+    .buy-tag {
+      font-size: 10px; padding: 1px 5px; border-radius: 3px;
+      background: var(--amber-light); color: var(--amber-dark);
+      display: inline-block; margin-top: 3px;
     }
-    .mv-item {
-      background: var(--color-bg);
-      border: 0.5px solid var(--color-border);
-      border-radius: var(--radius-lg); padding: 12px;
+    .buy-empty {
+      font-size: 12px; color: var(--text3);
+      padding: 14px 8px; text-align: center; line-height: 1.5;
     }
-    .mv-item.wild { border-color: #EF9F27; }
-    .mv-item-icon { font-size: 22px; margin-bottom: 6px; line-height: 1; }
-    .mv-item-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); line-height: 1.3; margin-bottom: 3px; }
-    .mv-item-price { font-size: 12px; color: var(--color-text-tertiary); }
-    .mv-item-tag {
-      font-size: 10px; padding: 2px 6px; border-radius: 4px;
-      display: inline-block; margin-top: 4px;
-      background: #FAEEDA; color: #633806;
+    .invest-body { padding: 10px 8px 10px; }
+    .rate-row {
+      display: flex; align-items: center;
+      gap: 6px; margin-bottom: 4px; padding: 0 2px;
     }
-    .mv-empty { font-size: 13px; color: var(--color-text-tertiary); padding: 1rem 0; grid-column: 1/-1; }
-    .mv-invest-box {
-      background: var(--color-bg-secondary);
-      border: 0.5px solid var(--color-border);
-      border-radius: var(--radius-lg); padding: 1rem; margin-bottom: 1.5rem;
+    .rate-row input[type=range] { flex: 1; min-width: 0; accent-color: var(--green); }
+    .rate-lbl { font-size: 11px; color: var(--text3); white-space: nowrap; }
+    .rate-val { font-size: 11px; font-weight: 500; color: var(--text); min-width: 24px; text-align: right; }
+    .rate-hint { font-size: 10px; color: var(--text3); margin-bottom: 10px; padding: 0 2px; }
+    .yr-cards { display: flex; flex-direction: column; gap: 5px; }
+    .yr-card {
+      background: var(--bg2);
+      border-radius: var(--radius-md);
+      padding: 8px 9px;
     }
-    .mv-invest-head {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 14px; font-weight: 500; color: var(--color-text-primary);
-      margin-bottom: 1rem;
+    .yr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+    .yr-label { font-size: 10px; color: var(--text3); }
+    .yr-pct {
+      font-size: 10px; color: var(--green);
+      background: var(--green-light);
+      border-radius: 4px; padding: 1px 5px;
     }
-    .mv-cells { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin-bottom: 1rem; }
-    .mv-cell {
-      background: var(--color-bg);
-      border: 0.5px solid var(--color-border);
-      border-radius: var(--radius-md); padding: 10px 6px; text-align: center;
+    .yr-val { font-size: 16px; font-weight: 500; color: var(--green); }
+    .invest-note {
+      font-size: 11px; color: var(--text2); line-height: 1.5;
+      margin-top: 8px; padding: 8px;
+      background: var(--bg2); border-radius: var(--radius-md);
     }
-    .mv-cell-yr { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 3px; }
-    .mv-cell-val { font-size: 15px; font-weight: 500; color: var(--green); word-break: break-all; }
-    .mv-cell-pct { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
-    .mv-invest-note {
-      font-size: 12px; color: var(--color-text-secondary); line-height: 1.6;
-      padding-top: .75rem; border-top: 0.5px solid var(--color-border);
-    }
-    .mv-rate-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-    .mv-rate-label { font-size: 13px; color: var(--color-text-secondary); white-space: nowrap; }
-    .mv-rate-val { font-size: 13px; font-weight: 500; color: var(--color-text-primary); min-width: 28px; }
-    .mv-rate-row input[type=range] { flex: 1; min-width: 0; accent-color: var(--green); }
-    .mv-rate-hint { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 10px; }
-    .mv-chart-wrap { position: relative; width: 100%; height: 200px; margin-bottom: 1rem; }
-    .mv-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1.25rem; }
-    .mv-legend span { display: flex; align-items: center; gap: 5px; }
-    .mv-ldot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-    .mv-disclaimer {
-      margin-top: 1.75rem; padding: .875rem 1rem;
-      background: var(--color-bg-secondary);
-      border: 0.5px solid var(--color-border);
-      border-radius: var(--radius-lg);
-    }
-    .mv-disclaimer-title {
+    .chart-section { padding: 0 1.25rem; }
+    .chart-head {
+      font-size: 12px; color: var(--text2);
+      margin-bottom: 8px;
       display: flex; align-items: center; gap: 6px;
-      font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 5px;
     }
-    .mv-disclaimer-body { font-size: 11px; color: var(--color-text-tertiary); line-height: 1.7; }
-    .mv-disclaimer-body a { color: var(--color-text-secondary); text-decoration: underline; }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .chart-legend {
+      display: flex; gap: 10px;
+      font-size: 11px; color: var(--text3);
+      margin-left: auto;
+    }
+    .chart-legend span { display: flex; align-items: center; gap: 4px; }
+    .ldot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    .chart-wrap { position: relative; width: 100%; height: 190px; margin-bottom: 1.5rem; }
+    .disclaimer {
+      margin: 0 1.25rem;
+      padding: .875rem 1rem;
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      font-size: 11px;
+      color: var(--text3);
+      line-height: 1.7;
+    }
+    .disc-title {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 500;
+      color: var(--text2); margin-bottom: 5px;
+    }
+    .disclaimer a { color: var(--text2); text-decoration: underline; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    @media (max-width: 400px) {
+      .hero-dollar, .hero-input { font-size: 32px; }
+      .hero-input { width: 160px; }
+    }
   </style>
 </head>
 <body>
 <div class="page">
-  <h1 class="app-title">What could your money buy?</h1>
-  <p class="app-subtitle">Enter any amount — or see what it could grow into if invested instead.</p>
+  <h1 class="sr-only">What could your money buy — or grow into if invested?</h1>
 
-  <div class="mv-input-row">
-    <span class="mv-dollar">$</span>
-    <input class="mv-amount" id="amountIn" type="number" inputmode="decimal" min="0" value="5" placeholder="0" aria-label="Dollar amount" />
-  </div>
-
-  <div class="mv-toggle" id="monthlyToggle" role="button" aria-pressed="false" tabindex="0">
-    <div class="mv-toggle-left">
-      <i class="ti ti-calendar-repeat" aria-hidden="true" style="font-size:18px"></i>
-      <span id="toggleLabel">One-time amount</span>
+  <div class="hero">
+    <div class="hero-eyebrow">spend it or grow it?</div>
+    <div class="hero-input-wrap">
+      <span class="hero-dollar">$</span>
+      <input class="hero-input" id="amt" type="number" inputmode="decimal" min="0" value="5" placeholder="0" aria-label="Dollar amount" />
     </div>
-    <div class="mv-toggle-track" id="toggleTrack"><div class="mv-toggle-thumb"></div></div>
-  </div>
-
-  <p class="mv-label">category</p>
-  <div class="mv-cats" id="catBtns"></div>
-
-  <p class="mv-label" id="buyLabel">things you could buy</p>
-  <div class="mv-grid" id="itemsGrid"></div>
-
-  <p class="mv-label">or invest it instead</p>
-  <div class="mv-rate-row">
-    <span class="mv-rate-label">Annual return</span>
-    <input type="range" id="rateSlider" min="1" max="15" value="7" step="1" aria-label="Annual return rate" />
-    <span class="mv-rate-val" id="rateOut">7%</span>
-  </div>
-  <div class="mv-rate-hint">S&amp;P 500 historical avg ~10%/yr</div>
-
-  <div class="mv-invest-box">
-    <div class="mv-invest-head">
-      <i class="ti ti-plant" aria-hidden="true" style="font-size:18px;color:#1D9E75"></i>
-      <span id="investHead">Invested at 7%/yr</span>
+    <br>
+    <div class="hero-toggle" id="tog" role="button" aria-pressed="false" tabindex="0">
+      <div class="track" id="track"><div class="thumb"></div></div>
+      <span id="togLabel">one-time</span>
     </div>
-    <div class="mv-cells" id="investCells"></div>
-    <div class="mv-invest-note" id="investNote"></div>
   </div>
 
-  <p class="mv-label">30-year growth</p>
-  <div class="mv-legend" id="chartLegend"></div>
-  <div class="mv-chart-wrap">
-    <canvas id="growthChart" role="img" aria-label="Line chart showing compound investment growth over 30 years"></canvas>
+  <div class="cats-wrap">
+    <div class="cats" id="cats"></div>
   </div>
 
-  <div class="mv-disclaimer">
-    <div class="mv-disclaimer-title">
-      <i class="ti ti-info-circle" aria-hidden="true" style="font-size:14px"></i>
-      Educational &amp; entertainment purposes only
+  <div class="split-wrap">
+    <div class="split">
+      <div class="panel">
+        <div class="panel-head panel-head-spend">
+          <span class="panel-head-icon">🛍️</span>
+          <div class="panel-head-label spend">if you<br>spent it</div>
+        </div>
+        <div class="panel-body">
+          <div class="buy-list" id="buyList"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head panel-head-invest">
+          <span class="panel-head-icon">🌱</span>
+          <div class="panel-head-label invest">if you<br>invested it</div>
+        </div>
+        <div class="panel-body">
+          <div class="invest-body">
+            <div class="rate-row">
+              <span class="rate-lbl">return</span>
+              <input type="range" id="rate" min="1" max="15" value="7" step="1" aria-label="Annual return rate" />
+              <span class="rate-val" id="rateOut">7%</span>
+            </div>
+            <div class="rate-hint">S&amp;P 500 avg ~10%/yr</div>
+            <div class="yr-cards" id="yrCards"></div>
+            <div class="invest-note" id="note"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="mv-disclaimer-body">
-      This tool is for educational and entertainment purposes only and does not constitute financial, investment, or legal advice.
-      All investment return figures are hypothetical based on a user-selected rate — not guaranteed and not a prediction of future performance.
-      Returns do not account for taxes, inflation, fees, or market volatility. Always consult a qualified financial advisor before making investment decisions.
-      By using this tool you agree to our <a href="/terms">Terms of Service</a>.
-      &copy; <span id="yr"></span> [Your LLC Name]. All rights reserved.
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-head">
+      30-year growth
+      <div class="chart-legend" id="legend"></div>
     </div>
+    <div class="chart-wrap">
+      <canvas id="gc" role="img" aria-label="Line chart showing 30-year compound investment growth"></canvas>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <div class="disc-title">
+      <i class="ti ti-info-circle" aria-hidden="true" style="font-size:13px"></i>
+      for fun &amp; education only
+    </div>
+    This tool is for educational and entertainment purposes only — not financial advice. Returns shown are hypothetical, user-selected, and not guaranteed. Past market performance doesn't predict future results. No investment is risk-free. Consult a qualified financial advisor before making decisions. By using this tool you agree to our <a href="/terms">Terms of Service</a>. &copy; <span id="yr"></span> What Could Your Money Buy?
   </div>
 </div>
 
@@ -247,12 +358,12 @@ const CATS = [
   {id:'lifestyle',label:'Lifestyle'},
   {id:'collectibles',label:'Collectibles'},
   {id:'experiences',label:'Experiences'},
-  {id:'tech',label:'Tech & subscriptions'},
+  {id:'tech',label:'Tech'},
   {id:'travel',label:'Travel'},
-  {id:'home',label:'Home & living'},
+  {id:'home',label:'Home'},
   {id:'wheels',label:'Wheels & wings'},
   {id:'realestate',label:'Real estate'},
-  {id:'wild',label:'🤯 Go wild'},
+  {id:'wild',label:'🤯 Wild'},
 ];
 
 const ITEMS = [
@@ -269,12 +380,10 @@ const ITEMS = [
   {name:'Sushi dinner',icon:'🍣',price:55,cat:'food',lo:35,hi:200},
   {name:'Fancy dinner for 2',icon:'🥂',price:120,cat:'food',lo:80,hi:500},
   {name:'Nice wine bottle',icon:'🍷',price:40,cat:'food',lo:25,hi:200},
-  {name:'Catered party tray',icon:'🫕',price:80,cat:'food',lo:50,hi:300},
   {name:'Grocery run',icon:'🛒',price:60,cat:'food',lo:40,hi:200},
   {name:'Private chef dinner',icon:'👨‍🍳',price:500,cat:'food',lo:300,hi:2000},
   {name:'Michelin tasting menu',icon:'⭐',price:350,cat:'food',lo:200,hi:1500},
   {name:'Luxury catering event',icon:'🍾',price:5000,cat:'food',lo:2000,hi:30000},
-  {name:'Super Bowl party catering',icon:'🏈',price:20000,cat:'food',lo:8000,hi:100000},
   {name:'Celebrity chef residency',icon:'🎖️',price:100000,cat:'food',lo:50000,hi:500000},
   {name:'Streaming month',icon:'📺',price:15.99,cat:'entertainment',lo:10,hi:60},
   {name:'Movie ticket',icon:'🎬',price:15,cat:'entertainment',lo:10,hi:60},
@@ -282,7 +391,6 @@ const ITEMS = [
   {name:'Concert ticket (local)',icon:'🎶',price:40,cat:'entertainment',lo:25,hi:150},
   {name:'Concert ticket (big)',icon:'🎸',price:150,cat:'entertainment',lo:80,hi:600},
   {name:'Sporting event ticket',icon:'🏟️',price:90,cat:'entertainment',lo:50,hi:400},
-  {name:'Board game (new)',icon:'🎲',price:45,cat:'entertainment',lo:25,hi:150},
   {name:'Escape room',icon:'🔐',price:30,cat:'entertainment',lo:20,hi:100},
   {name:'VIP suite at game',icon:'🏆',price:5000,cat:'entertainment',lo:2000,hi:30000},
   {name:'Super Bowl tickets (2)',icon:'🏈',price:12000,cat:'entertainment',lo:5000,hi:60000},
@@ -290,7 +398,6 @@ const ITEMS = [
   {name:'Private concert booking',icon:'🎤',price:500000,cat:'entertainment',lo:100000,hi:5000000},
   {name:'Buy a sports franchise',icon:'🥇',price:2000000000,cat:'entertainment',lo:500000000,hi:1e13},
   {name:'Own an NFL team',icon:'🏈',price:5000000000,cat:'entertainment',lo:1000000000,hi:1e13},
-  {name:'Pair of socks',icon:'🧦',price:6,cat:'lifestyle',lo:3,hi:35},
   {name:'Chapstick',icon:'💄',price:4,cat:'lifestyle',lo:0,hi:25},
   {name:'Candle',icon:'🕯️',price:15,cat:'lifestyle',lo:8,hi:60},
   {name:'Fitness class',icon:'🧘',price:20,cat:'lifestyle',lo:12,hi:80},
@@ -299,15 +406,10 @@ const ITEMS = [
   {name:'Sneakers (budget)',icon:'👟',price:60,cat:'lifestyle',lo:35,hi:200},
   {name:'Designer sneakers',icon:'👠',price:250,cat:'lifestyle',lo:150,hi:800},
   {name:'Spa day',icon:'💆',price:150,cat:'lifestyle',lo:80,hi:500},
-  {name:'Perfume/cologne',icon:'🌸',price:80,cat:'lifestyle',lo:40,hi:300},
   {name:'Watch (fashion)',icon:'⌚',price:120,cat:'lifestyle',lo:60,hi:400},
-  {name:'Watch (luxury)',icon:'🕰️',price:5000,cat:'lifestyle',lo:2000,hi:30000},
-  {name:'Rolex Submariner',icon:'⌚',price:12000,cat:'lifestyle',lo:5000,hi:60000},
+  {name:'Rolex Submariner',icon:'🕰️',price:12000,cat:'lifestyle',lo:5000,hi:60000},
   {name:'Patek Philippe watch',icon:'💠',price:50000,cat:'lifestyle',lo:20000,hi:300000},
-  {name:'Bespoke suit',icon:'🤵',price:3000,cat:'lifestyle',lo:1500,hi:15000},
-  {name:'Handbag (designer)',icon:'👜',price:800,cat:'lifestyle',lo:400,hi:4000},
   {name:'Hermès Birkin',icon:'👝',price:30000,cat:'lifestyle',lo:10000,hi:200000},
-  {name:'Custom jewelry set',icon:'💎',price:20000,cat:'lifestyle',lo:8000,hi:100000},
   {name:'Vending machine toy',icon:'🪀',price:0.75,cat:'collectibles',lo:0,hi:10},
   {name:'Pokémon booster pack',icon:'🎴',price:5,cat:'collectibles',lo:0,hi:30},
   {name:'Sports card pack',icon:'⚾',price:15,cat:'collectibles',lo:8,hi:60},
@@ -318,237 +420,177 @@ const ITEMS = [
   {name:'Graded PSA-10 card',icon:'💯',price:1000,cat:'collectibles',lo:500,hi:5000},
   {name:'Rare sneakers',icon:'🔥',price:500,cat:'collectibles',lo:250,hi:2000},
   {name:'Vintage comic (key issue)',icon:'📚',price:800,cat:'collectibles',lo:400,hi:4000},
-  {name:'Original art print',icon:'🖼️',price:75,cat:'collectibles',lo:40,hi:300},
-  {name:'First edition book',icon:'📗',price:150,cat:'collectibles',lo:80,hi:600},
-  {name:'Signed jersey (superstar)',icon:'🏅',price:3000,cat:'collectibles',lo:1000,hi:15000},
   {name:'Action Comics #1 (raw)',icon:'🦸',price:1000000,cat:'collectibles',lo:500000,hi:5000000},
   {name:'Honus Wagner T206 card',icon:'🃏',price:7000000,cat:'collectibles',lo:2000000,hi:30000000},
-  {name:'Rembrandt painting',icon:'🎨',price:25000000,cat:'collectibles',lo:5000000,hi:200000000},
   {name:'Warhol original',icon:'🖌️',price:50000000,cat:'collectibles',lo:10000000,hi:400000000},
   {name:'Picasso masterpiece',icon:'🎭',price:180000000,cat:'collectibles',lo:50000000,hi:1e9},
   {name:'Museum entry',icon:'🏛️',price:18,cat:'experiences',lo:10,hi:70},
   {name:'Wine tasting',icon:'🍾',price:35,cat:'experiences',lo:20,hi:120},
   {name:'Cooking class',icon:'🍳',price:75,cat:'experiences',lo:40,hi:250},
-  {name:'Surf lesson',icon:'🏄',price:80,cat:'experiences',lo:40,hi:300},
   {name:'Skydiving session',icon:'🪂',price:200,cat:'experiences',lo:100,hi:800},
-  {name:'Couples massage',icon:'💑',price:150,cat:'experiences',lo:80,hi:500},
   {name:'Hot air balloon ride',icon:'🎈',price:250,cat:'experiences',lo:150,hi:900},
   {name:'Helicopter tour',icon:'🚁',price:300,cat:'experiences',lo:150,hi:1200},
-  {name:'Theme park tickets (2)',icon:'🎡',price:200,cat:'experiences',lo:100,hi:700},
   {name:'African safari (week)',icon:'🦁',price:8000,cat:'experiences',lo:3000,hi:40000},
   {name:'Antarctica expedition',icon:'🧊',price:15000,cat:'experiences',lo:6000,hi:80000},
-  {name:'Everest base camp trek',icon:'🏔️',price:5000,cat:'experiences',lo:2000,hi:25000},
   {name:'Space tourism (suborbital)',icon:'🚀',price:450000,cat:'experiences',lo:100000,hi:2000000},
   {name:'ISS private astronaut trip',icon:'🛸',price:55000000,cat:'experiences',lo:10000000,hi:300000000},
-  {name:'App purchase',icon:'📱',price:4.99,cat:'tech',lo:0,hi:25},
   {name:'Spotify (month)',icon:'🎵',price:9.99,cat:'tech',lo:5,hi:45},
-  {name:'Cheap Bluetooth speaker',icon:'🔊',price:25,cat:'tech',lo:12,hi:80},
-  {name:'Mechanical keyboard',icon:'⌨️',price:120,cat:'tech',lo:60,hi:400},
+  {name:'Bluetooth speaker',icon:'🔊',price:25,cat:'tech',lo:12,hi:80},
   {name:'Noise-cancelling headphones',icon:'🎧',price:200,cat:'tech',lo:100,hi:700},
   {name:'iPad (entry)',icon:'💻',price:329,cat:'tech',lo:200,hi:1200},
-  {name:'AirPods Pro',icon:'🎶',price:249,cat:'tech',lo:150,hi:900},
   {name:'iPhone (base)',icon:'📳',price:799,cat:'tech',lo:400,hi:3000},
   {name:'MacBook Air',icon:'🖥️',price:1099,cat:'tech',lo:600,hi:4000},
   {name:'Gaming PC build',icon:'🖱️',price:1200,cat:'tech',lo:700,hi:5000},
-  {name:'Custom server rack',icon:'🗄️',price:20000,cat:'tech',lo:8000,hi:100000},
-  {name:'Tesla home Powerwall',icon:'⚡',price:12000,cat:'tech',lo:5000,hi:60000},
-  {name:'Private data center',icon:'💾',price:5000000,cat:'tech',lo:1000000,hi:30000000},
-  {name:'Supercomputer cluster',icon:'🧠',price:100000000,cat:'tech',lo:20000000,hi:1e9},
   {name:'Satellite launch',icon:'🛰️',price:60000000,cat:'tech',lo:10000000,hi:400000000},
   {name:'Buy a social media platform',icon:'📡',price:44000000000,cat:'tech',lo:5000000000,hi:1e13},
-  {name:'Uber ride (local)',icon:'🚕',price:12,cat:'travel',lo:5,hi:50},
-  {name:'Train ticket (1-way)',icon:'🚆',price:30,cat:'travel',lo:15,hi:100},
+  {name:'Uber ride',icon:'🚕',price:12,cat:'travel',lo:5,hi:50},
   {name:'Hotel night (budget)',icon:'🏨',price:80,cat:'travel',lo:40,hi:300},
   {name:'Hotel night (luxury)',icon:'🏩',price:400,cat:'travel',lo:200,hi:1500},
   {name:'Domestic flight',icon:'✈️',price:250,cat:'travel',lo:150,hi:900},
   {name:'International flight',icon:'🌍',price:800,cat:'travel',lo:400,hi:3000},
-  {name:'Airbnb (weekend)',icon:'🛖',price:300,cat:'travel',lo:150,hi:1200},
   {name:'All-inclusive resort (wk)',icon:'🌴',price:2000,cat:'travel',lo:1000,hi:8000},
-  {name:'Private villa rental (wk)',icon:'🏯',price:15000,cat:'travel',lo:5000,hi:80000},
-  {name:'First class RTW ticket',icon:'💺',price:30000,cat:'travel',lo:10000,hi:150000},
-  {name:'Private island rental (wk)',icon:'🏝️',price:50000,cat:'travel',lo:20000,hi:300000},
   {name:'Private jet charter (day)',icon:'🛩️',price:20000,cat:'travel',lo:8000,hi:100000},
-  {name:'Cruise cabin (week)',icon:'🚢',price:1000,cat:'travel',lo:500,hi:5000},
   {name:'Superyacht charter (week)',icon:'🛥️',price:500000,cat:'travel',lo:100000,hi:3000000},
-  {name:'Nice throw pillow',icon:'🛋️',price:40,cat:'home',lo:20,hi:150},
   {name:'Flower bouquet',icon:'💐',price:30,cat:'home',lo:15,hi:100},
-  {name:'Cookware piece',icon:'🍳',price:60,cat:'home',lo:30,hi:200},
-  {name:'Robot vacuum (budget)',icon:'🤖',price:180,cat:'home',lo:100,hi:700},
-  {name:'Air purifier',icon:'💨',price:150,cat:'home',lo:80,hi:600},
-  {name:'Standing desk',icon:'🖥️',price:300,cat:'home',lo:150,hi:1200},
+  {name:'Espresso machine',icon:'☕',price:600,cat:'home',lo:300,hi:2500},
   {name:'KitchenAid mixer',icon:'🥣',price:400,cat:'home',lo:200,hi:1500},
   {name:'Smart TV (55")',icon:'📺',price:500,cat:'home',lo:250,hi:2000},
-  {name:'Espresso machine',icon:'☕',price:600,cat:'home',lo:300,hi:2500},
   {name:'Hot tub',icon:'🛁',price:8000,cat:'home',lo:3000,hi:40000},
-  {name:'Home theater setup',icon:'🎥',price:15000,cat:'home',lo:5000,hi:80000},
-  {name:'Full kitchen remodel',icon:'🏗️',price:40000,cat:'home',lo:15000,hi:200000},
   {name:'Swimming pool install',icon:'🏊',price:60000,cat:'home',lo:25000,hi:300000},
   {name:'Luxury interior design',icon:'🏠',price:200000,cat:'home',lo:80000,hi:1000000},
   {name:'Budget used car',icon:'🚙',price:8000,cat:'wheels',lo:3000,hi:40000},
   {name:'Honda Civic (new)',icon:'🚗',price:25000,cat:'wheels',lo:10000,hi:120000},
-  {name:'Toyota Camry (new)',icon:'🚘',price:30000,cat:'wheels',lo:15000,hi:150000},
   {name:'Tesla Model 3',icon:'⚡',price:40000,cat:'wheels',lo:20000,hi:200000},
-  {name:'BMW 5 Series',icon:'🏎️',price:60000,cat:'wheels',lo:30000,hi:300000},
   {name:'Porsche 911',icon:'🏁',price:120000,cat:'wheels',lo:60000,hi:600000},
-  {name:'Ferrari 488',icon:'🔴',price:280000,cat:'wheels',lo:120000,hi:1400000},
   {name:'Lamborghini Huracán',icon:'🟡',price:250000,cat:'wheels',lo:100000,hi:1200000},
   {name:'Bugatti Chiron',icon:'💨',price:3000000,cat:'wheels',lo:1000000,hi:15000000},
   {name:'Rolls-Royce Phantom',icon:'👑',price:500000,cat:'wheels',lo:200000,hi:2500000},
-  {name:'Koenigsegg Jesko',icon:'🚀',price:3000000,cat:'wheels',lo:1000000,hi:15000000},
-  {name:'Private helicopter',icon:'🚁',price:2000000,cat:'wheels',lo:800000,hi:10000000},
   {name:'Gulfstream G700 jet',icon:'🛩️',price:75000000,cat:'wheels',lo:20000000,hi:400000000},
-  {name:'Superyacht (60m)',icon:'🛥️',price:30000000,cat:'wheels',lo:10000000,hi:200000000},
   {name:'Superyacht (100m)',icon:'🚢',price:200000000,cat:'wheels',lo:50000000,hi:1e9},
-  {name:'Submarine (private)',icon:'🤿',price:15000000,cat:'wheels',lo:5000000,hi:80000000},
-  {name:'Boeing 747 (used)',icon:'✈️',price:20000000,cat:'wheels',lo:8000000,hi:100000000},
   {name:'Studio apartment (rural)',icon:'🏠',price:80000,cat:'realestate',lo:30000,hi:400000},
-  {name:'Starter home (midwest)',icon:'🏡',price:200000,cat:'realestate',lo:80000,hi:1000000},
   {name:'Average US home',icon:'🏘️',price:420000,cat:'realestate',lo:150000,hi:2000000},
   {name:'NYC condo (1BR)',icon:'🏙️',price:900000,cat:'realestate',lo:300000,hi:4500000},
-  {name:'LA house (nice suburb)',icon:'🌅',price:1200000,cat:'realestate',lo:400000,hi:6000000},
-  {name:'SF house (decent)',icon:'🌉',price:1400000,cat:'realestate',lo:500000,hi:7000000},
   {name:'Manhattan penthouse',icon:'🗽',price:10000000,cat:'realestate',lo:3000000,hi:60000000},
-  {name:'Malibu beachfront home',icon:'🌊',price:15000000,cat:'realestate',lo:4000000,hi:80000000},
   {name:'Beverly Hills estate',icon:'🌴',price:25000000,cat:'realestate',lo:8000000,hi:150000000},
   {name:'Private island (small)',icon:'🏝️',price:8000000,cat:'realestate',lo:2000000,hi:50000000},
-  {name:'Private island (large)',icon:'🌏',price:50000000,cat:'realestate',lo:15000000,hi:300000000},
-  {name:'French Riviera villa',icon:'🇫🇷',price:20000000,cat:'realestate',lo:6000000,hi:100000000},
   {name:'Manhattan city block',icon:'🏗️',price:1000000000,cat:'realestate',lo:200000000,hi:5000000000},
-  {name:'Skyscraper (mid-tier)',icon:'🏢',price:500000000,cat:'realestate',lo:100000000,hi:3000000000},
-  {name:'Major US city office tower',icon:'🌆',price:2000000000,cat:'realestate',lo:500000000,hi:10000000000},
-  {name:'A literal rocket ship',icon:'🚀',price:62000000,cat:'wild',lo:10000000,hi:500000000},
-  {name:'Your face on a Times Square billboard (yr)',icon:'📸',price:3000000,cat:'wild',lo:500000,hi:20000000},
   {name:'Name a star after yourself',icon:'⭐',price:50,cat:'wild',lo:0,hi:500},
-  {name:"Buy a country's national debt",icon:'🌐',price:50000000000,cat:'wild',lo:5000000000,hi:1e13},
+  {name:'Legally rename a city street',icon:'🛣️',price:50000,cat:'wild',lo:10000,hi:300000},
+  {name:"McDonald's franchise",icon:'🍔',price:1500000,cat:'wild',lo:500000,hi:8000000},
+  {name:'Commission a statue of yourself',icon:'🗿',price:500000,cat:'wild',lo:100000,hi:3000000},
+  {name:'Your face on Times Square billboard',icon:'📸',price:3000000,cat:'wild',lo:500000,hi:20000000},
   {name:'Build your own roller coaster',icon:'🎢',price:30000000,cat:'wild',lo:5000000,hi:200000000},
   {name:'Fund a feature film',icon:'🎬',price:100000000,cat:'wild',lo:20000000,hi:600000000},
   {name:'Buy a professional sports team',icon:'🏆',price:2000000000,cat:'wild',lo:300000000,hi:1e13},
-  {name:'Run for President (campaign)',icon:'🗳️',price:1000000000,cat:'wild',lo:200000000,hi:5000000000},
   {name:'Build a theme park',icon:'🎡',price:4000000000,cat:'wild',lo:500000000,hi:2e10},
-  {name:'Buy the Eiffel Tower (if it sold)',icon:'🗼',price:435000000,cat:'wild',lo:100000000,hi:3000000000},
-  {name:'Commission a statue of yourself',icon:'🗿',price:500000,cat:'wild',lo:100000,hi:3000000},
-  {name:'Legally rename a city street',icon:'🛣️',price:50000,cat:'wild',lo:10000,hi:300000},
-  {name:'Own a retired aircraft carrier',icon:'⚓',price:40000000,cat:'wild',lo:10000000,hi:300000000},
-  {name:'Entire Amazon rainforest (conservation est.)',icon:'🌳',price:500000000000,cat:'wild',lo:50000000000,hi:1e14},
   {name:'Moon landing mission',icon:'🌕',price:93000000000,cat:'wild',lo:10000000000,hi:1e12},
-  {name:'Build a space station',icon:'🛸',price:150000000000,cat:'wild',lo:20000000000,hi:1e12},
-  {name:'Buy all the gold ever mined',icon:'🥇',price:13000000000000,cat:'wild',lo:1000000000000,hi:1e15},
-  {name:'Buy every home in the US',icon:'🏠',price:45000000000000,cat:'wild',lo:5000000000000,hi:1e15},
   {name:'Erase the US national debt',icon:'🇺🇸',price:33000000000000,cat:'wild',lo:5000000000000,hi:1e15},
+  {name:'Buy every home in the US',icon:'🏡',price:45000000000000,cat:'wild',lo:5000000000000,hi:1e15},
   {name:'Global GDP (one year)',icon:'🌍',price:100000000000000,cat:'wild',lo:10000000000000,hi:1e16},
-  {name:"Jeff Bezos's net worth",icon:'💸',price:200000000000,cat:'wild',lo:50000000000,hi:2e12},
-  {name:"McDonald's franchise (single)",icon:'🍔',price:1500000,cat:'wild',lo:500000,hi:8000000},
-  {name:'Rename a planet (hypothetically)',icon:'🪐',price:999999999999999,cat:'wild',lo:1e12,hi:1e16},
+  {name:'Rename a planet',icon:'🪐',price:999999999999999,cat:'wild',lo:1e12,hi:1e16},
 ];
 
-const YRS = [10, 20, 30];
 let chart = null, activeCat = 'all', isMonthly = false;
 
-function compound(p,r,y){ return p * Math.pow(1 + r/100, y); }
-function compoundMonthly(m,r,y){ const n=y*12, rm=r/100/12; return rm===0 ? m*n : m*(Math.pow(1+rm,n)-1)/rm; }
+function cp(p,r,y){ return p * Math.pow(1 + r/100, y); }
+function cm(m,r,y){ const n=y*12, rm=r/100/12; return rm===0 ? m*n : m*(Math.pow(1+rm,n)-1)/rm; }
 function fmt(n){
-  if(n<1000) return '$'+n.toFixed(2);
-  if(n<1e6)  return '$'+(n/1000).toFixed(1)+'k';
-  if(n<1e9)  return '$'+(n/1e6).toFixed(2)+'M';
-  if(n<1e12) return '$'+(n/1e9).toFixed(2)+'B';
-  if(n<1e15) return '$'+(n/1e12).toFixed(2)+'T';
-  return '$'+(n/1e15).toFixed(2)+'Q';
+  if(n < 1000)  return '$' + n.toFixed(2);
+  if(n < 1e6)   return '$' + (n/1000).toFixed(1) + 'k';
+  if(n < 1e9)   return '$' + (n/1e6).toFixed(2) + 'M';
+  if(n < 1e12)  return '$' + (n/1e9).toFixed(2) + 'B';
+  if(n < 1e15)  return '$' + (n/1e12).toFixed(2) + 'T';
+  return '$' + (n/1e15).toFixed(2) + 'Q';
 }
-function fmtLabel(n){
-  if(n>=1e12) return '$'+(n/1e12).toFixed(1)+'T';
-  if(n>=1e9)  return '$'+(n/1e9).toFixed(1)+'B';
-  if(n>=1e6)  return '$'+(n/1e6).toFixed(1)+'M';
-  return '$'+n.toLocaleString();
-}
-function getItems(amount){
-  const fc = activeCat==='all' ? null : activeCat;
+
+function getItems(amt){
+  const fc = activeCat === 'all' ? null : activeCat;
   return ITEMS.filter(i => {
-    if(fc && i.cat!==fc) return false;
-    return amount>=i.lo && amount<=i.hi && i.price<=amount;
-  }).sort((a,b)=>b.price-a.price).slice(0,6);
+    if(fc && i.cat !== fc) return false;
+    return amt >= i.lo && amt <= i.hi && i.price <= amt;
+  }).sort((a,b) => b.price - a.price).slice(0, 7);
 }
 
 function render(){
-  const amount = Math.max(0, parseFloat(document.getElementById('amountIn').value)||0);
-  const rate = parseInt(document.getElementById('rateSlider').value);
-  document.getElementById('rateOut').textContent = rate+'%';
-  document.getElementById('investHead').textContent = (isMonthly?'Monthly at ':'Invested at ')+rate+'%/yr';
-  document.getElementById('buyLabel').textContent = isMonthly ? 'things you spend '+fmtLabel(amount)+'/mo on' : 'things you could buy';
-  const track = document.getElementById('toggleTrack');
-  track.className = 'mv-toggle-track'+(isMonthly?' on':'');
-  document.getElementById('toggleLabel').textContent = isMonthly ? 'Monthly contributions' : 'One-time amount';
-  document.getElementById('monthlyToggle').setAttribute('aria-pressed', isMonthly?'true':'false');
+  const amt  = Math.max(0, parseFloat(document.getElementById('amt').value) || 0);
+  const rate = parseInt(document.getElementById('rate').value);
 
-  const grid = document.getElementById('itemsGrid');
-  if(amount===0){
-    grid.innerHTML = '<p class="mv-empty">Enter an amount above.</p>';
+  document.getElementById('rateOut').textContent = rate + '%';
+  document.getElementById('track').className = 'track' + (isMonthly ? ' on' : '');
+  document.getElementById('togLabel').textContent = isMonthly ? 'monthly' : 'one-time';
+  document.getElementById('tog').setAttribute('aria-pressed', isMonthly ? 'true' : 'false');
+
+  const matches = getItems(amt);
+  const buyList = document.getElementById('buyList');
+  if(amt === 0){
+    buyList.innerHTML = '<div class="buy-empty">enter an amount above ↑</div>';
+  } else if(!matches.length){
+    buyList.innerHTML = '<div class="buy-empty">nothing in range —<br>try another category</div>';
   } else {
-    const matches = getItems(amount);
-    if(!matches.length){
-      grid.innerHTML = '<p class="mv-empty">No items found — try a different category.</p>';
-    } else {
-      grid.innerHTML = matches.map(item => {
-        const qty = Math.floor(amount/item.price);
-        const qStr = qty>1 ? qty+'x ' : '';
-        const pStr = qty>1 ? fmt(item.price)+' ea' : fmt(item.price);
-        const isWild = item.cat==='wild';
-        return `<div class="mv-item${isWild?' wild':''}">
-          <div class="mv-item-icon">${item.icon}</div>
-          <div class="mv-item-name">${qStr}${item.name}</div>
-          <div class="mv-item-price">${pStr}</div>
-          ${isWild?'<span class="mv-item-tag">wild</span>':''}
-        </div>`;
-      }).join('');
-    }
+    buyList.innerHTML = matches.map(item => {
+      const qty  = Math.floor(amt / item.price);
+      const qStr = qty > 1 ? qty + '× ' : '';
+      const pStr = qty > 1 ? fmt(item.price) + ' ea' : fmt(item.price);
+      return `<div class="buy-item">
+        <div class="buy-icon">${item.icon}</div>
+        <div>
+          <div class="buy-name">${qStr}${item.name}</div>
+          <div class="buy-price">${pStr}</div>
+          ${item.cat==='wild' ? '<span class="buy-tag">wild</span>' : ''}
+        </div>
+      </div>`;
+    }).join('');
   }
 
-  document.getElementById('investCells').innerHTML = YRS.map(yr => {
-    const future = isMonthly ? compoundMonthly(amount,rate,yr) : compound(amount,rate,yr);
-    const base = isMonthly ? amount*12*yr : amount;
-    const pct = base>0 ? Math.round((future/base-1)*100) : 0;
-    return `<div class="mv-cell">
-      <div class="mv-cell-yr">${yr} yrs</div>
-      <div class="mv-cell-val">${fmt(future)}</div>
-      <div class="mv-cell-pct">+${pct}%</div>
+  document.getElementById('yrCards').innerHTML = [10,20,30].map(yr => {
+    const future = isMonthly ? cm(amt,rate,yr) : cp(amt,rate,yr);
+    const base   = isMonthly ? amt*12*yr : amt;
+    const pct    = base > 0 ? Math.round((future/base - 1) * 100) : 0;
+    return `<div class="yr-card">
+      <div class="yr-top">
+        <div class="yr-label">${yr} years</div>
+        <span class="yr-pct">+${pct}%</span>
+      </div>
+      <div class="yr-val">${fmt(future)}</div>
     </div>`;
   }).join('');
 
-  const v30 = isMonthly ? compoundMonthly(amount,rate,30) : compound(amount,rate,30);
-  const c30 = isMonthly ? amount*12*30 : amount;
-  document.getElementById('investNote').textContent = amount>0
+  const v30 = isMonthly ? cm(amt,rate,30) : cp(amt,rate,30);
+  const c30 = isMonthly ? amt*12*30 : amt;
+  document.getElementById('note').textContent = amt > 0
     ? (isMonthly
-        ? `${fmt(amount)}/mo contributed = ${fmt(c30)} over 30 years. With compounding: ${fmt(v30)}.`
-        : `$${amount} invested once grows to ${fmt(v30)} in 30 years.`)
+        ? `${fmt(amt)}/mo × 30 yrs = ${fmt(c30)} contributed → ${fmt(v30)} with compounding`
+        : `${fmt(amt)} grows to ${fmt(v30)} in 30 years at ${rate}%/yr`)
     : '';
 
-  const labels = Array.from({length:31},(_,i)=>i);
-  const invested = isMonthly ? labels.map(y=>+(amount*12*y).toFixed(2)) : labels.map(()=>+amount.toFixed(2));
-  const grown = labels.map(y=>+((isMonthly?compoundMonthly(amount,rate,y):compound(amount,rate,y)).toFixed(2)));
+  const labels   = Array.from({length:31}, (_,i) => i);
+  const invested = isMonthly ? labels.map(y => +(amt*12*y).toFixed(2)) : labels.map(() => +amt.toFixed(2));
+  const grown    = labels.map(y => +((isMonthly ? cm(amt,rate,y) : cp(amt,rate,y)).toFixed(2)));
 
-  document.getElementById('chartLegend').innerHTML = `
-    <span><span class="mv-ldot" style="background:#1D9E75"></span>Value</span>
-    <span><span class="mv-ldot" style="background:#B5D4F4;border:0.5px solid #378ADD"></span>${isMonthly?'Contributed':'Principal'}</span>`;
+  document.getElementById('legend').innerHTML = `
+    <span><span class="ldot" style="background:#1D9E75"></span>value</span>
+    <span><span class="ldot" style="background:#B5D4F4;border:0.5px solid #378ADD"></span>${isMonthly?'contributed':'principal'}</span>`;
 
   if(chart){
     chart.data.datasets[0].data = grown;
     chart.data.datasets[1].data = invested;
     chart.update();
   } else {
-    chart = new Chart(document.getElementById('growthChart'), {
+    chart = new Chart(document.getElementById('gc'), {
       type: 'line',
       data: { labels, datasets: [
-        {label:'Value',data:grown,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',fill:true,tension:0.35,pointRadius:0,borderWidth:2},
-        {label:'Principal',data:invested,borderColor:'#378ADD',backgroundColor:'rgba(181,212,244,0.25)',fill:true,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[4,3]}
+        {label:'Value',    data:grown,    borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.07)', fill:true, tension:0.35, pointRadius:0, borderWidth:2},
+        {label:'Principal',data:invested, borderColor:'#378ADD', backgroundColor:'rgba(181,212,244,0.2)',  fill:true, tension:0,    pointRadius:0, borderWidth:1.5, borderDash:[4,3]}
       ]},
       options: {
-        responsive:true, maintainAspectRatio:false,
-        plugins:{ legend:{display:false}, tooltip:{callbacks:{
-          title: ctx=>'Year '+ctx[0].label,
-          label: ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend:{display:false}, tooltip:{callbacks:{
+          title: c => 'Year ' + c[0].label,
+          label: c => ' ' + c.dataset.label + ': ' + fmt(c.parsed.y)
         }}},
-        scales:{
-          x:{ticks:{color:'#888780',font:{size:10},callback:v=>'yr '+v,maxTicksLimit:6},grid:{color:'rgba(136,135,128,0.1)'}},
-          y:{ticks:{color:'#888780',font:{size:10},callback:v=>fmt(v),maxTicksLimit:5},grid:{color:'rgba(136,135,128,0.1)'}}
+        scales: {
+          x: { ticks:{color:'#888780',font:{size:10},callback:v=>'yr '+v,maxTicksLimit:6}, grid:{color:'rgba(136,135,128,0.08)'} },
+          y: { ticks:{color:'#888780',font:{size:10},callback:v=>fmt(v),maxTicksLimit:5},  grid:{color:'rgba(136,135,128,0.08)'} }
         }
       }
     });
@@ -556,21 +598,23 @@ function render(){
 }
 
 function buildCats(){
-  const wrap = document.getElementById('catBtns');
-  wrap.innerHTML = CATS.map(c=>`<button class="mv-cat${c.id===activeCat?' active':''}" data-cat="${c.id}">${c.label}</button>`).join('');
-  wrap.querySelectorAll('.mv-cat').forEach(btn => {
+  const wrap = document.getElementById('cats');
+  wrap.innerHTML = CATS.map(c =>
+    `<button class="cat${c.id===activeCat?' on':''}" data-cat="${c.id}">${c.label}</button>`
+  ).join('');
+  wrap.querySelectorAll('.cat').forEach(btn => {
     btn.addEventListener('click', () => {
       activeCat = btn.dataset.cat;
-      wrap.querySelectorAll('.mv-cat').forEach(b=>b.classList.toggle('active', b.dataset.cat===activeCat));
+      wrap.querySelectorAll('.cat').forEach(b => b.classList.toggle('on', b.dataset.cat === activeCat));
       render();
     });
   });
 }
 
-document.getElementById('amountIn').addEventListener('input', render);
-document.getElementById('rateSlider').addEventListener('input', render);
-document.getElementById('monthlyToggle').addEventListener('click', ()=>{ isMonthly=!isMonthly; render(); });
-document.getElementById('monthlyToggle').addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ isMonthly=!isMonthly; render(); }});
+document.getElementById('amt').addEventListener('input', render);
+document.getElementById('rate').addEventListener('input', render);
+document.getElementById('tog').addEventListener('click', () => { isMonthly = !isMonthly; render(); });
+document.getElementById('tog').addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ isMonthly=!isMonthly; render(); }});
 
 buildCats();
 render();
